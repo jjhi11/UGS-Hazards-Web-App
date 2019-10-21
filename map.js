@@ -1631,35 +1631,6 @@ layerList = new LayerList({
     }
 });
 
-//watch the layers visibility to test turning on/off legend
-console.log(mapView.map);
-
-
-        // watch all layers
-        mapView.map.layers.forEach(lyr => watchLayerVisibility(lyr));
-        
-        // watch all future layers that are added to map
-        mapView.map.layers.on('changes', e => {
-            console.log(e);
-                      // layer is added, watch it
-          if (e.added.length > 0){
-            e.added.forEach(lyr => watchLayerVisibility(lyr));
-          }
-          // layer is removed, clear watch
-          if (e.removed.length > 0){
-            e.removed.forEach(lyr => {
-              watcherMap.get(lyr).remove();
-              watcherMap.delete(lyr);
-            });
-          }
-        });
-
-      
-      function watchLayerVisibility(lyr){
-        let watcher = watchUtils.watch(lyr, 'visible', e => console.log(`visibility for layer with title ${lyr.title} is ${e}`));
-        
-        
-      }
 
 //layerlist action for opacity
 

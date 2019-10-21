@@ -1,0 +1,19 @@
+{
+  "name": "hazardsapp",
+  "version": "1.0.0",
+  "description": "UGS Hazards Web Map Application",
+  "main": "map.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jjhi11/UGS-Hazards-Web-App.git"
+  },
+  "author": "Jay Hill",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jjhi11/UGS-Hazards-Web-App/issues"
+  },
+  "homepage": "https://github.com/jjhi11/UGS-Hazards-Web-App#readme"
+}
