@@ -1807,7 +1807,7 @@ function addGraphic(event) {
   });
   tempGraphicsLayer.add(graphic);
   console.log(event.graphic);
-  aoi = event.graphic.geometry.rings;
+  aoi = event.graphic.geometry.toJSON();
 }
 
 
@@ -1861,22 +1861,25 @@ var downloadButton = document.getElementById("DownloadButton");
 downloadButton.onclick = function() {
   // set the sketch to create a polygon geometry
   //sketchViewModel.create("polygon");
-  var inputGraphicContainer = [];
-          inputGraphicContainer.push(graphic);
-          var featureSet = new FeatureSet();
-          featureSet.features = inputGraphicContainer;
-          console.log(inputGraphicContainer);
-          console.log(featureSet);
+//   var inputGraphicContainer = [];
+//           inputGraphicContainer.push(graphic);
+//           var featureSet = new FeatureSet();
+//           featureSet.features = inputGraphicContainer;
+//           console.log(inputGraphicContainer);
+//           console.log(featureSet);
   console.log(graphic);
   console.log(aoi);
 
   var params = {
-        type: "polygon",
-        rings: [aoi],
-        spatialReference: {"wkid":3857}
+        description: "Poop",
+        polygon: aoi,
 
           };
     console.log(params);
+
+    localStorage.setItem('aoi', JSON.stringify(params));
+    console.log(localStorage);
+    window.open('./report');
 };
 
 
