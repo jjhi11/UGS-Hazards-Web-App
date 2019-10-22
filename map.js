@@ -1871,7 +1871,7 @@ downloadButton.onclick = function() {
   console.log(aoi);
 
   var params = {
-        description: "Poop",
+        description: "Test",
         polygon: aoi,
 
           };
