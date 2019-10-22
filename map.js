@@ -1879,7 +1879,7 @@ downloadButton.onclick = function() {
 
     localStorage.setItem('aoi', JSON.stringify(params));
     console.log(localStorage);
-    window.open('./report');
+    window.open('/report');
 };
 
 
