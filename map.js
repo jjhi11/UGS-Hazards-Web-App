@@ -809,7 +809,7 @@ landslideDepositPopup = function(feature) {
             });            
 
             const epicentersRecent = new FeatureLayer({
-                url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards_View/FeatureServer/0",
+                url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/0",
                 title: "Epicenters (1850 to 2016)",
                 // elevationInfo: [{
                 //     mode: "on-the-ground"
@@ -827,7 +827,7 @@ landslideDepositPopup = function(feature) {
 
 
             const epicentersMining = new FeatureLayer({
-                url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards_View/FeatureServer/1",
+                url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/1",
                 title: "Mining-Induced Epicenters",
                 //elevationInfo: [{
                 //     mode: "on-the-ground"
@@ -844,14 +844,13 @@ landslideDepositPopup = function(feature) {
             });
 
             const liquefaction = new FeatureLayer({
-                url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards_View/FeatureServer/3",
+                url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/3",
                 title: "Liquefaction Susceptibility",
                 visible: false,
                 outFields: ["*"],
                 popupTemplate: {
                      title: "<b>Liquefaction Susceptibility</b>",
                      outFields: ["*"],
-                     //content: liquefactionPopup,
 
                      content: [{
                          type: "fields",
@@ -882,7 +881,7 @@ landslideDepositPopup = function(feature) {
 
 
             const qFaults = new FeatureLayer({
-                url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards_View/FeatureServer/2",
+                url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/2",
                 title: "Quaternary Faults",
                 visible: true,
                 outFields: ["*"],
@@ -895,7 +894,7 @@ landslideDepositPopup = function(feature) {
             });
 
             const faultRupture = new FeatureLayer({
-                url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards_View/FeatureServer/4",
+                url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/4",
                 title: "Surface Fault Rupture Hazard Special Study Zone",
                 visible: false,
                 outFields: ["*"],
