@@ -883,7 +883,7 @@ landslideDepositPopup = function(feature) {
             const qFaults = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/2",
                 title: "Quaternary Faults",
-                visible: true,
+                visible: false,
                 outFields: ["*"],
                 popupTemplate: {
                     title:"<b>Quaternary Faults</b>",
@@ -1258,7 +1258,7 @@ landslideDepositPopup = function(feature) {
 
             const solubleSoil = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/18",
-                title: "Soluble Soil & Rock Susceptibility",
+                title: "Soluble Soil and Rock Susceptibility",
                 visible: false,   
                 outFields: ["*"],
                 popupTemplate: {
@@ -1318,37 +1318,37 @@ landslideDepositPopup = function(feature) {
                      }              
             });
 
-            const floodCanyon = new FeatureLayer({
-                url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/0",
-                title: "Flood Canyon Hazard",
-                renderer: rendererFloodCanyon,
-                visible: false,  
-                outFields: ["*"],
-                popupTemplate: {
-                     title: "<b>{relationships/0/HazardName}</b>",
-                     content: [{
-                         type: "fields",
-                         fieldInfos: [{
-                             fieldName: "FCHMappedScale",
-                             visible: false,
-                             label: "Mapped Scale"
-                         },
-                         {
-                            fieldName: "relationships/0/Description",
-                            visible: false,
-                            label: "Hazard Description"
-                        }, {
-                         fieldName: "relationships/0/HazardName",
-                         visible: false,
-                         label: "Hazard"
-                        }]
-                     },
-                     {
-                    type: "text",
-                    text: "<b>{Hazard_Symbology_Text}: </b>{relationships/0/Description}<br>{FCHMappedScale:fchPopup}"
-                }]
-                     }              
-            });
+            // const floodCanyon = new FeatureLayer({
+            //     url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/0",
+            //     title: "Flood Canyon Hazard",
+            //     renderer: rendererFloodCanyon,
+            //     visible: false,  
+            //     outFields: ["*"],
+            //     popupTemplate: {
+            //          title: "<b>{relationships/0/HazardName}</b>",
+            //          content: [{
+            //              type: "fields",
+            //              fieldInfos: [{
+            //                  fieldName: "FCHMappedScale",
+            //                  visible: false,
+            //                  label: "Mapped Scale"
+            //              },
+            //              {
+            //                 fieldName: "relationships/0/Description",
+            //                 visible: false,
+            //                 label: "Hazard Description"
+            //             }, {
+            //              fieldName: "relationships/0/HazardName",
+            //              visible: false,
+            //              label: "Hazard"
+            //             }]
+            //          },
+            //          {
+            //         type: "text",
+            //         text: "<b>{Hazard_Symbology_Text}: </b>{relationships/0/Description}<br>{FCHMappedScale:fchPopup}"
+            //     }]
+            //          }              
+            // });
 
             const floodHazard = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/0",
