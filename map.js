@@ -53,11 +53,11 @@
       // Map
       var map = new Map({
                 basemap: "hybrid",
-                //ground: "world-elevation",
+                ground: "world-elevation",
             });
       
       // View
-      var mapView = new MapView({
+      var mapView = new SceneView({
                 container: "mapViewDiv",
                 map: map,
                 center: [-112, 39.5],
@@ -745,6 +745,9 @@ landslideDepositPopup = function(feature) {
             const landslideComp = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/4",
                 title: "Legacy Landslide Compilation",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false,
                 outFields: ["*"],
                 popupTemplate: {
@@ -758,6 +761,9 @@ landslideDepositPopup = function(feature) {
             const landslideDeposit = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/3",
                 title: "Landslides",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false,
                 outFields: ["*"],
                 popupTemplate: {
@@ -774,6 +780,9 @@ landslideDepositPopup = function(feature) {
                 visible: false,
                 //renderer: landslideSusRenderer,
                 title: "Landslide Susceptibility",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 outFields: ["*"],
                 // popupTemplate: {
                 //     outFields: ["*"],
@@ -811,9 +820,9 @@ landslideDepositPopup = function(feature) {
             const epicentersRecent = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/0",
                 title: "Epicenters (1850 to 2016)",
-                // elevationInfo: [{
-                //     mode: "on-the-ground"
-                // }],
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false,
                 outFields: ["*"],
             popupTemplate: {
@@ -825,13 +834,17 @@ landslideDepositPopup = function(feature) {
                 renderer: rendererRecent,
             });
 
+            epicentersRecent.featureReduction = {
+                type: "selection"
+              };
+
 
             const epicentersMining = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/1",
                 title: "Mining-Induced Epicenters",
-                //elevationInfo: [{
-                //     mode: "on-the-ground"
-                // }],
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false,
                 outFields: ["*"],
                 popupTemplate: {
@@ -846,6 +859,9 @@ landslideDepositPopup = function(feature) {
             const liquefaction = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/3",
                 title: "Liquefaction Susceptibility",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false,
                 outFields: ["*"],
                 popupTemplate: {
@@ -883,6 +899,9 @@ landslideDepositPopup = function(feature) {
             const qFaults = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/2",
                 title: "Quaternary Faults",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false,
                 outFields: ["*"],
                 popupTemplate: {
@@ -896,6 +915,9 @@ landslideDepositPopup = function(feature) {
             const faultRupture = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/4",
                 title: "Surface Fault Rupture Hazard Special Study Zone",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false,
                 outFields: ["*"],
                 popupTemplate: {
@@ -927,6 +949,9 @@ landslideDepositPopup = function(feature) {
             const eolianSus = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/19",
                 title: "Wind-Blown Sand Susceptibility",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false,
                 outFields: ["*"],
                 popupTemplate: {
@@ -961,6 +986,9 @@ landslideDepositPopup = function(feature) {
             const tectonicDef = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/16",
                 title: "Salt Tectonics Related Ground Deformation",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false,     
                 outFields: ["*"],
                 popupTemplate: {
@@ -998,6 +1026,9 @@ landslideDepositPopup = function(feature) {
             const bedrockPot = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/17",
                 title: "Shallow Bedrock Potential",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false,   
                 outFields: ["*"],
                 popupTemplate: {
@@ -1035,6 +1066,9 @@ landslideDepositPopup = function(feature) {
             const rockfallHaz = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/15",
                 title: "Rockfall Hazard",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false,    
                 outFields: ["*"],
                 popupTemplate: {
@@ -1073,6 +1107,9 @@ landslideDepositPopup = function(feature) {
             const pipingSus = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/13",
                 title: "Piping and Erosion Suscepbtibility",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false,  
                 outFields: ["*"],
                 popupTemplate: {
@@ -1104,6 +1141,9 @@ landslideDepositPopup = function(feature) {
             const expansiveSoil = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/10",
                 title: "Expansive Soil and Rock Susceptibility",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false,  
                 outFields: ["*"],
                 popupTemplate: {
@@ -1135,6 +1175,9 @@ landslideDepositPopup = function(feature) {
             const groundwaterSus = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/1",
                 title: "Shallow Groundwater Susceptibility",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false,
                 outFields: ["*"],
                 popupTemplate: {
@@ -1166,6 +1209,9 @@ landslideDepositPopup = function(feature) {
             const radonSus = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/14",
                 title: "Radon Susceptibility",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false,         
                 outFields: ["*"],
                 popupTemplate: {
@@ -1197,6 +1243,9 @@ landslideDepositPopup = function(feature) {
             const corrosiveSoil = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/7",
                 title: "Corrosive Soil and Rock Susceptibility",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false,  
                 outFields: ["*"],
                 popupTemplate: {
@@ -1228,6 +1277,9 @@ landslideDepositPopup = function(feature) {
             const collapsibleSoil = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/6",
                 title: "Collapsible Soil Susceptibility",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false, 
                 outFields: ["*"],
                 popupTemplate: {
@@ -1259,6 +1311,9 @@ landslideDepositPopup = function(feature) {
             const solubleSoil = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/18",
                 title: "Soluble Soil and Rock Susceptibility",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false,   
                 outFields: ["*"],
                 popupTemplate: {
@@ -1290,6 +1345,9 @@ landslideDepositPopup = function(feature) {
             const caliche = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/5",
                 title: "Caliche Susceptibility",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false,  
                 outFields: ["*"],
                 popupTemplate: {
@@ -1353,6 +1411,9 @@ landslideDepositPopup = function(feature) {
             const floodHazard = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/0",
                 title: "Flood Hazard",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false, 
                 outFields: ["*"],
                 popupTemplate: {
@@ -1384,6 +1445,9 @@ landslideDepositPopup = function(feature) {
             const earthFissure = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/8",
                 title: "Earth Fissure Hazard",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false,   
                 outFields: ["*"],
                 popupTemplate: {
@@ -1415,6 +1479,9 @@ landslideDepositPopup = function(feature) {
             const erosionZone = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/9",
                 title: "JE Fuller Flood Erosion Hazard Zones",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false,   
                 outFields: ["*"],
                 popupTemplate: {
@@ -1446,6 +1513,9 @@ landslideDepositPopup = function(feature) {
             const groundSubsidence = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/11",
                 title: "Ground Subsidence Potential",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false,        
                 outFields: ["*"],
                 popupTemplate: {
@@ -1477,6 +1547,9 @@ landslideDepositPopup = function(feature) {
             const karstFeatures = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/12",
                 title: "Karst Features",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
                 visible: false,  
                 outFields: ["*"],
                 popupTemplate: {
@@ -1514,6 +1587,9 @@ landslideDepositPopup = function(feature) {
             const quadBoundaries = new FeatureLayer({
               url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards_Supplemental_Data_View/FeatureServer/0",
               title: "USGS 1:24,000 Scale Quad Boundaries",
+              elevationInfo: [{
+                mode: "on-the-ground"
+            }],
               labelingInfo: {
   labelExpressionInfo: { expression: "$feature.NAME" },
   symbol: {
@@ -1536,6 +1612,9 @@ landslideDepositPopup = function(feature) {
             const hazardStudy = new FeatureLayer({
               url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards_Supplemental_Data_View/FeatureServer/1",
               title: "Mapped Areas",
+              elevationInfo: [{
+                mode: "on-the-ground"
+            }],
               outFields: ["*"],
               popupTemplate: {
                 outFields: ["*"],
@@ -1546,15 +1625,22 @@ landslideDepositPopup = function(feature) {
               //visible: true,
             });
 
+
             const lidarBounds = new FeatureLayer({
               url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards_Supplemental_Data_View/FeatureServer/2",
               title: "Lidar Extents",
+              elevationInfo: [{
+                mode: "on-the-ground"
+            }],
               visible: false,
             })
 
             const airphotoPoints = new FeatureLayer({
               url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards_Supplemental_Data_View/FeatureServer/3",
               title: "Aerial Imagery Centerpoints",
+              elevationInfo: [{
+                mode: "on-the-ground"
+            }],
               visible: false,
               minScale: 500000,
             })
@@ -1562,6 +1648,9 @@ landslideDepositPopup = function(feature) {
             const notMapped = new FeatureLayer({
               url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards_Supplemental_Data_View/FeatureServer/4",
               title: "Areas Not Mapped w/in Project Areas",
+              elevationInfo: [{
+                mode: "on-the-ground"
+            }],
               visible: true,
             })
 
