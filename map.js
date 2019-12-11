@@ -180,58 +180,58 @@ var tempGraphic = null;
             qfaultsPopup = function(feature) {
                 console.log(feature);
                 var content = "";
-                    if (feature.graphic.attributes.FaultNum) {
-                        content += "<span class='bold' title='Magnitude'><b>Fault Number: </b></span>{FaultNum}<br/>";
+                    if (feature.graphic.attributes.faultnum) {
+                        content += "<span class='bold' title='Magnitude'><b>Fault Number: </b></span>{faultnum}<br/>";
                     }
-                    if (feature.graphic.attributes.FaultZone) {
-                        content += "<span class='bold' title='Longitude'><b>Fault Zone: </b></span>{FaultZone}<br/>";
+                    if (feature.graphic.attributes.faultzone) {
+                        content += "<span class='bold' title='Longitude'><b>Fault Zone: </b></span>{faultzone}<br/>";
                     }
-                    if (feature.graphic.attributes.FaultName) {
-                        content += "<span class='bold' title='Latitude'><b>Fault Name: </b></span>{FaultName}<br/>";
+                    if (feature.graphic.attributes.faultname) {
+                        content += "<span class='bold' title='Latitude'><b>Fault Name: </b></span>{faultname}<br/>";
                     }
-                    if (feature.graphic.attributes.SectionName) {
-                        content += "<span class='bold' title='Depth'><b>Section Name: </b></span>{SectionName}<br/>";
+                    if (feature.graphic.attributes.sectionname) {
+                        content += "<span class='bold' title='Depth'><b>Section Name: </b></span>{sectionname}<br/>";
                     }
-                    if (feature.graphic.attributes.StrandName) {
-                        content += "<span class='bold' title='Date'><b>Strand Name: </b></span>{StrandName}<br/>";
+                    if (feature.graphic.attributes.strandname) {
+                        content += "<span class='bold' title='Date'><b>Strand Name: </b></span>{strandname}<br/>";
                     }
-                    if (feature.graphic.attributes.MappedScale) {
-                        content += "<span class='bold' title='Date'><b>Mapped Scale: </b></span>{MappedScale}<br/>";
+                    if (feature.graphic.attributes.mappedscale) {
+                        content += "<span class='bold' title='Date'><b>Mapped Scale: </b></span>{mappedscale}<br/>";
                     }
-                    if (feature.graphic.attributes.DipDirection) {
-                        content += "<span class='bold' title='Date'><b>Dip Direction: </b></span>{DipDirection}<br/>";
+                    if (feature.graphic.attributes.dipdirection) {
+                        content += "<span class='bold' title='Date'><b>Dip Direction: </b></span>{dipdirection}<br/>";
                     }
-                    if (feature.graphic.attributes.SlipSense) {
-                        content += "<span class='bold' title='Date'><b>Slip Sense: </b></span>{SlipSense}<br/>";
+                    if (feature.graphic.attributes.slipsense) {
+                        content += "<span class='bold' title='Date'><b>Slip Sense: </b></span>{slipsense}<br/>";
                     }
-                    if (feature.graphic.attributes.SlipRate) {
-                        content += "<span class='bold' title='Date'><b>Slip Rate: </b></span>{SlipRate}<br/>";
+                    if (feature.graphic.attributes.sliprate) {
+                        content += "<span class='bold' title='Date'><b>Slip Rate: </b></span>{sliprate}<br/>";
                     }
-                    if (feature.graphic.attributes.MappingConstraint) {
-                        content += "<span class='bold' title='Date'><b>Mapping Constraint: </b></span>{MappingConstraint}<br/>";
+                    if (feature.graphic.attributes.mappingconstraint) {
+                        content += "<span class='bold' title='Date'><b>Mapping Constraint: </b></span>{mappingconstraint}<br/>";
                     }
-                var slipS = feature.graphic.attributes.SlipSense;
+                var slipS = feature.graphic.attributes.slipsense;
 
                         if (slipS == "Normal") {
-                            content += "<span class='bold' title='Date'><b>Fault Class: </b></span>{FaultClass}<br/>";
+                            content += "<span class='bold' title='Date'><b>Fault Class: </b></span>{faultclass}<br/>";
                         }
                         else if (slipS == "Reverse") {
-                            content += "<span class='bold' title='Date'><b>Fault Class: </b></span>{FaultClass}<br/>";   
+                            content += "<span class='bold' title='Date'><b>Fault Class: </b></span>{faultclass}<br/>";   
                         }
                         else {
-                            content += "<span class='bold' title='Date'><b>Fold Class: </b></span>{FaultClass}<br/>";
+                            content += "<span class='bold' title='Date'><b>Fold Class: </b></span>{faultclass}<br/>";
                         }
 
 
 
                         if (slipS == "Normal") {
-                            content += "<span class='bold' title='Date'><b>Fault Age: </b></span>{FaultAge}<br/>";
+                            content += "<span class='bold' title='Date'><b>Fault Age: </b></span>{faultage}<br/>";
                         }
                         else if (slipS == "Reverse") {
-                            content += "<span class='bold' title='Date'><b>Fault Age: </b></span>{FaultAge}<br/>";   
+                            content += "<span class='bold' title='Date'><b>Fault Age: </b></span>{faultage}<br/>";   
                         }
                         else {
-                            content += "<span class='bold' title='Date'><b>Fold Age: </b></span>{FaultAge}<br/>";
+                            content += "<span class='bold' title='Date'><b>Fold Age: </b></span>{faultage}<br/>";
                         }
 
                 if (feature.graphic.attributes.USGS_Link) {
@@ -739,6 +739,25 @@ landslideDepositPopup = function(feature) {
 //   }
 // });
 
+// Qfaults symbology 
+
+var oldestDottedFault = {
+    type: "simple-line",
+    style: "dash",
+    cap: "round",
+    join: "round",
+    width: 1.5
+  };
+
+  var qFaultRenderer = {
+      type: "unique-value",
+      field: "FaultAge",
+      uniqueValueInfos: [{
+          value: "<2,600,000",
+          symbol: oldestDottedFault
+      }]
+
+  }
 
 
 
@@ -896,21 +915,96 @@ landslideDepositPopup = function(feature) {
             });
 
 
-            const qFaults = new FeatureLayer({
-                url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/2",
+            // const qFaults = new FeatureLayer({
+            //     url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/2",
+            //     title: "Quaternary Faults",
+            //     elevationInfo: [{
+            //         mode: "on-the-ground"
+            //     }],
+            //     visible: false,
+            //     outFields: ["*"],
+            //     //renderer: qFaultRenderer,
+            //     popupTemplate: {
+            //         title:"<b>Quaternary Faults</b>",
+            //         content: qfaultsPopup
+            //     },
+                
+
+            // });
+
+            const qFaults = new MapImageLayer({
+                // portalItem: {
+                //     id: "59821b8c97ed41e896fce6061a1c8ab0"
+                // },
+                url: "https://webmaps.geology.utah.gov/arcgis/rest/services/Hazards/quaternary_faults/MapServer",
+                //outFields: ["*"],
+
+                sublayers: [
+                    {
+                      id: 0,
+                      visible: true,
+
+                      popupTemplate: {
+                        outFields: ["*"],
+                        title:"<b>Quaternary Faults</b>",
+                        content: qfaultsPopup
+                    },
+                    }],
+                //url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/2",
                 title: "Quaternary Faults",
-                elevationInfo: [{
-                    mode: "on-the-ground"
-                }],
-                visible: false,
-                outFields: ["*"],
-                popupTemplate: {
-                    title:"<b>Quaternary Faults</b>",
-                    content: qfaultsPopup
-                },
+                listMode: "hide-children",
+                visible: true,
+                
                 
 
             });
+
+    //         var qFaults = new MapImageLayer({
+    //             url: "https://webmaps.geology.utah.gov/arcgis/rest/services/Hazards/Faults_Quaternary/MapServer",
+    //             title: "Quaternary Faults",
+    //                             elevationInfo: [{
+    //                 mode: "on-the-ground"
+    //             }],
+    //             outFields: ["*"],
+    // //             sublayers: [
+    // // /*            {
+    // //                 id: 1,  // search layer
+    // //                 visible: false,
+    // //                 title: "Search Layer",
+    // //                 legendEnabled: false,
+    // //                 //type: "map-layer",
+    // //               },*/
+    // //               {
+    // //                 id: 1,  // label layer
+    // //                 //visible: false,
+    // //                 title: "Label Layer",
+    // //                 legendEnabled: false,
+    // //                 //type: "data-layer",
+    // //               },
+    // //               {
+    // //                 id: 2,  // zoomed out symbology
+    // //                 visible: false,
+    // //                 title: "Faults and Folds (zoomed out)",
+    // //                 legendEnabled: true,
+    // //                 //maxScale: 100000,
+    // //                 //minScale: 8000000,
+    // //                 popupTemplate: {
+    // //                     title:"<b>Quaternary Faults</b>",
+    // //                     content: qfaultsPopup },
+    // //               },
+    // //               {
+    // //                 id: 3,   // zoomed in symbology
+    // //                 visible: false,
+    // //                 title: "Faults and Folds (zoomed in)",
+    // //                 legendEnabled: false,
+    // //                 //maxScale : 1128.49,
+    // //                 //minScale : 99000,
+    // //                 popupTemplate: {
+    // //                     title:"<b>Quaternary Faults</b>",
+    // //                     content: qfaultsPopup },
+    // //               },
+    // //          ]
+    //          });
 
             const faultRupture = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/4",
