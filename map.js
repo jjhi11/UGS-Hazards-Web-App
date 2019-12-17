@@ -66,6 +66,12 @@
                     top: 50,
                     bottom: 0
                 },
+                // highlightOptions: {
+                //     color: [255, 255, 0, 1],
+                //     haloColor: "white",
+                //     haloOpacity: 0.9,
+                //     fillOpacity: 0.2
+                //   },
                 ui: {
                     components: []
                 }
@@ -914,7 +920,7 @@ var oldestDottedFault = {
                 
             });
 
-
+// **********qfaults from arcgis online as a featurelayer
             // const qFaults = new FeatureLayer({
             //     url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/2",
             //     title: "Quaternary Faults",
@@ -932,13 +938,9 @@ var oldestDottedFault = {
 
             // });
 
+// **********qfaults from our server as a mapimageservice
             const qFaults = new MapImageLayer({
-                // portalItem: {
-                //     id: "59821b8c97ed41e896fce6061a1c8ab0"
-                // },
                 url: "https://webmaps.geology.utah.gov/arcgis/rest/services/Hazards/quaternary_faults/MapServer",
-                //outFields: ["*"],
-
                 sublayers: [
                     {
                       id: 0,
@@ -950,7 +952,6 @@ var oldestDottedFault = {
                         content: qfaultsPopup
                     },
                     }],
-                //url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/2",
                 title: "Quaternary Faults",
                 listMode: "hide-children",
                 visible: true,
@@ -959,52 +960,7 @@ var oldestDottedFault = {
 
             });
 
-    //         var qFaults = new MapImageLayer({
-    //             url: "https://webmaps.geology.utah.gov/arcgis/rest/services/Hazards/Faults_Quaternary/MapServer",
-    //             title: "Quaternary Faults",
-    //                             elevationInfo: [{
-    //                 mode: "on-the-ground"
-    //             }],
-    //             outFields: ["*"],
-    // //             sublayers: [
-    // // /*            {
-    // //                 id: 1,  // search layer
-    // //                 visible: false,
-    // //                 title: "Search Layer",
-    // //                 legendEnabled: false,
-    // //                 //type: "map-layer",
-    // //               },*/
-    // //               {
-    // //                 id: 1,  // label layer
-    // //                 //visible: false,
-    // //                 title: "Label Layer",
-    // //                 legendEnabled: false,
-    // //                 //type: "data-layer",
-    // //               },
-    // //               {
-    // //                 id: 2,  // zoomed out symbology
-    // //                 visible: false,
-    // //                 title: "Faults and Folds (zoomed out)",
-    // //                 legendEnabled: true,
-    // //                 //maxScale: 100000,
-    // //                 //minScale: 8000000,
-    // //                 popupTemplate: {
-    // //                     title:"<b>Quaternary Faults</b>",
-    // //                     content: qfaultsPopup },
-    // //               },
-    // //               {
-    // //                 id: 3,   // zoomed in symbology
-    // //                 visible: false,
-    // //                 title: "Faults and Folds (zoomed in)",
-    // //                 legendEnabled: false,
-    // //                 //maxScale : 1128.49,
-    // //                 //minScale : 99000,
-    // //                 popupTemplate: {
-    // //                     title:"<b>Quaternary Faults</b>",
-    // //                     content: qfaultsPopup },
-    // //               },
-    // //          ]
-    //          });
+
 
             const faultRupture = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/4",
@@ -2084,6 +2040,36 @@ function setActiveButton(selectedButton) {
   }
 }
 });
+
+// mapView.popup.watch('selectedFeature', function(gra){
+//     console.log(gra);
+//     if(gra.sourceLayer.url == "https://webmaps.geology.utah.gov/arcgis/rest/services/Hazards/quaternary_faults/MapServer/0"){
+//         console.log("We have a fault");
+//       mapView.graphics.removeAll();
+//       //var h = mapView.highlightOptions;
+//       gra.symbol = {
+//         type: "simple-line", // autocasts as new SimpleFillSymbol()
+//         color: [0,255, 255, 2],
+//         width: 2
+//         // outline: {
+//         //   // autocasts as new SimpleLineSymbol()
+//         //   color: [115, 255, 223, 1],
+//         //   width: 2
+//         // }
+//       };
+//       mapView.graphics.add(gra);
+//     }
+//     else{
+//         console.log("not a fault");
+//       mapView.graphics.removeAll();
+//     }
+//   });
+  
+//   mapView.popup.watch('visible', function(vis){
+//     if(!vis){
+//       mapView.graphics.removeAll();
+//     }
+//   });
 
 
 
