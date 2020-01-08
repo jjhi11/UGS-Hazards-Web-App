@@ -186,58 +186,58 @@ var tempGraphic = null;
             qfaultsPopup = function(feature) {
                 console.log(feature);
                 var content = "";
-                    if (feature.graphic.attributes.faultnum) {
-                        content += "<span class='bold' title='Magnitude'><b>Fault Number: </b></span>{faultnum}<br/>";
+                    if (feature.graphic.attributes.FaultNum) {
+                        content += "<span class='bold' title='Magnitude'><b>Fault Number: </b></span>{FaultNum}<br/>";
                     }
-                    if (feature.graphic.attributes.faultzone) {
-                        content += "<span class='bold' title='Longitude'><b>Fault Zone: </b></span>{faultzone}<br/>";
+                    if (feature.graphic.attributes.FaultZone) {
+                        content += "<span class='bold' title='Longitude'><b>Fault Zone: </b></span>{FaultZone}<br/>";
                     }
-                    if (feature.graphic.attributes.faultname) {
-                        content += "<span class='bold' title='Latitude'><b>Fault Name: </b></span>{faultname}<br/>";
+                    if (feature.graphic.attributes.FaultName) {
+                        content += "<span class='bold' title='Latitude'><b>Fault Name: </b></span>{FaultName}<br/>";
                     }
-                    if (feature.graphic.attributes.sectionname) {
-                        content += "<span class='bold' title='Depth'><b>Section Name: </b></span>{sectionname}<br/>";
+                    if (feature.graphic.attributes.SectionName) {
+                        content += "<span class='bold' title='Depth'><b>Section Name: </b></span>{SectionName}<br/>";
                     }
-                    if (feature.graphic.attributes.strandname) {
-                        content += "<span class='bold' title='Date'><b>Strand Name: </b></span>{strandname}<br/>";
+                    if (feature.graphic.attributes.StrandName) {
+                        content += "<span class='bold' title='Date'><b>Strand Name: </b></span>{StrandName}<br/>";
                     }
-                    if (feature.graphic.attributes.mappedscale) {
-                        content += "<span class='bold' title='Date'><b>Mapped Scale: </b></span>{mappedscale}<br/>";
+                    if (feature.graphic.attributes.MappedScale) {
+                        content += "<span class='bold' title='Date'><b>Mapped Scale: </b></span>{MappedScale}<br/>";
                     }
-                    if (feature.graphic.attributes.dipdirection) {
-                        content += "<span class='bold' title='Date'><b>Dip Direction: </b></span>{dipdirection}<br/>";
+                    if (feature.graphic.attributes.DipDirection) {
+                        content += "<span class='bold' title='Date'><b>Dip Direction: </b></span>{DipDirection}<br/>";
                     }
-                    if (feature.graphic.attributes.slipsense) {
-                        content += "<span class='bold' title='Date'><b>Slip Sense: </b></span>{slipsense}<br/>";
+                    if (feature.graphic.attributes.SlipSense) {
+                        content += "<span class='bold' title='Date'><b>Slip Sense: </b></span>{SlipSense}<br/>";
                     }
-                    if (feature.graphic.attributes.sliprate) {
-                        content += "<span class='bold' title='Date'><b>Slip Rate: </b></span>{sliprate}<br/>";
+                    if (feature.graphic.attributes.SlipRate) {
+                        content += "<span class='bold' title='Date'><b>Slip Rate: </b></span>{SlipRate}<br/>";
                     }
-                    if (feature.graphic.attributes.mappingconstraint) {
-                        content += "<span class='bold' title='Date'><b>Mapping Constraint: </b></span>{mappingconstraint}<br/>";
+                    if (feature.graphic.attributes.MappingConstraint) {
+                        content += "<span class='bold' title='Date'><b>Mapping Constraint: </b></span>{MappingConstraint}<br/>";
                     }
-                var slipS = feature.graphic.attributes.slipsense;
+                var slipS = feature.graphic.attributes.SlipSense;
 
                         if (slipS == "Normal") {
-                            content += "<span class='bold' title='Date'><b>Fault Class: </b></span>{faultclass}<br/>";
+                            content += "<span class='bold' title='Date'><b>Fault Class: </b></span>{FaultClass}<br/>";
                         }
                         else if (slipS == "Reverse") {
-                            content += "<span class='bold' title='Date'><b>Fault Class: </b></span>{faultclass}<br/>";   
+                            content += "<span class='bold' title='Date'><b>Fault Class: </b></span>{FaultClass}<br/>";   
                         }
                         else {
-                            content += "<span class='bold' title='Date'><b>Fold Class: </b></span>{faultclass}<br/>";
+                            content += "<span class='bold' title='Date'><b>Fold Class: </b></span>{FaultClass}<br/>";
                         }
 
 
 
                         if (slipS == "Normal") {
-                            content += "<span class='bold' title='Date'><b>Fault Age: </b></span>{faultage}<br/>";
+                            content += "<span class='bold' title='Date'><b>Fault Age: </b></span>{FaultAge}<br/>";
                         }
                         else if (slipS == "Reverse") {
-                            content += "<span class='bold' title='Date'><b>Fault Age: </b></span>{faultage}<br/>";   
+                            content += "<span class='bold' title='Date'><b>Fault Age: </b></span>{FaultAge}<br/>";   
                         }
                         else {
-                            content += "<span class='bold' title='Date'><b>Fold Age: </b></span>{faultage}<br/>";
+                            content += "<span class='bold' title='Date'><b>Fold Age: </b></span>{FaultAge}<br/>";
                         }
 
                 if (feature.graphic.attributes.USGS_Link) {
@@ -954,7 +954,7 @@ var oldestDottedFault = {
                     }],
                 title: "Quaternary Faults",
                 listMode: "hide-children",
-                visible: true,
+                visible: false,
                 
                 
 
@@ -1258,7 +1258,7 @@ var oldestDottedFault = {
 
             const radonSus = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/14",
-                title: "Radon Susceptibility",
+                title: "Geologic Radon Susceptibility",
                 elevationInfo: [{
                     mode: "on-the-ground"
                 }],
@@ -1631,7 +1631,7 @@ var oldestDottedFault = {
             const soilHazards = new GroupLayer({
                 title: "Problem Soil and Rock Hazards",
                 visible: true,
-                layers: [radonSus, eolianSus, pipingSus, rockfallHaz, bedrockPot, solubleSoil, tectonicDef, karstFeatures, groundSubsidence, expansiveSoil, erosionZone, earthFissure, corrosiveSoil, collapsibleSoil, caliche]
+                layers: [radonSus, eolianSus, pipingSus, bedrockPot, solubleSoil, tectonicDef, karstFeatures, groundSubsidence, expansiveSoil, erosionZone, earthFissure, corrosiveSoil, collapsibleSoil, caliche]
             });
 
             const quadBoundaries = new FeatureLayer({
@@ -1721,7 +1721,7 @@ var oldestDottedFault = {
             const landslides = new GroupLayer({
                 title: "Landslide Hazards",
                 visible: true,
-                layers: [landslideComp, landslideSusceptibility, landslideDeposit],    
+                layers: [landslideComp, landslideSusceptibility, landslideDeposit, rockfallHaz],    
             });
             
             mapView.map.add(quadBoundaries);
@@ -1750,11 +1750,11 @@ layerList = new LayerList({
                 open: true
             }
             item.actionsSections = [
-                // [{
-                //     title: "Layer information",
-                //     className: "esri-icon-description",
-                //     id: "information"
-                // }],
+                [{
+                    title: "Layer information",
+                    className: "esri-icon-description",
+                    id: "information"
+                }],
                 [{
                     title: "Increase opacity",
                     className: "esri-icon-up",
@@ -1807,8 +1807,6 @@ if (title === "Hazard Study Area Boundaries") {
                     layer = earthFissure;
                 } else if (title === "Flood Hazard") {
                     layer = floodHazard;
-                } else if (title === "Flood Canyon Hazard") {
-                    layer = floodCanyon;
                 } else if (title === "Caliche Susceptibility") {
                     layer = caliche;
                 } else if (title === "Soluble Soil & Rock Susceptibility") {
@@ -1817,7 +1815,7 @@ if (title === "Hazard Study Area Boundaries") {
                     layer = collapsibleSoil;
                 } else if (title === "Corrosive Soil and Rock Susceptibility") {
                     layer = corrosiveSoil;
-                } else if (title === "Radon Susceptibility") {
+                } else if (title === "Geologic Radon Susceptibility") {
                     layer = radonSus;
                 } else if (title === "Shallow Groundwater Susceptibility") {
                     layer = groundwaterSus;
