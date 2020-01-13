@@ -27,6 +27,27 @@
       width: 100%;
     }
 
+.modal {
+  display: none;
+  position: fixed;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
 .esri-feature__last-edited-info {
 
     display: none;
@@ -83,7 +104,11 @@ div.esri-legend__message {
         <li><a role="menuitem" tabindex="0" data-target="#panelInfo" aria-haspopup="true"><span class="glyphicon glyphicon-info-sign"></span> About</a></li>
         <li><a role="menuitem" tabindex="0" href="#" data-target="#panelLegend" aria-haspopup="true"><span class="glyphicon glyphicon-list-alt"></span> Legend</a></li>
         <li><a role="menuitem" tabindex="0" href="#" data-target="#panelBasemaps" aria-haspopup="true"><span class="esri-icon-basemap"></span> Basemaps</a></li>
-        <li><a role="menuitem" tabindex="0" href="#" data-target="#panelReport" aria-haspopup="true"><span class="esri-icon-documentation"></span> Report Generator</a></li>
+        <li><a role="menuitem" tabindex="0" href="#" data-target="#panelReport" aria-haspopup="true"><span class="esri-icon-documentation"></span> Generate Report</a></li>
+        <li><a role="menuitem" tabindex="0" data-target="#panelDisclaimer" aria-haspopup="true"><span class="glyphicon glyphicon-warning-sign"></span> Dislaimer</a></li>
+        <li><a role="menuitem" tabindex="0" data-target="#panelDatabase" aria-haspopup="true"><span class="glyphicon glyphicon-list-alt"></span> Database Contents</a></li>
+        <li><a role="menuitem" tabindex="0" data-target="#panelAcks" aria-haspopup="true"><span class="glyphicon glyphicon-user"></span> Acknowledgments</a></li>
+        <li><a role="menuitem" tabindex="0" data-target="#panelRefs" aria-haspopup="true"><span class="glyphicon glyphicon-tasks"></span> References</a></li>
         
       </ul>
     </div>
@@ -129,8 +154,12 @@ div.esri-legend__message {
       <div id="collapseInfo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingInfo">
         <div class="panel-body">
             <p><strong>UTAH GEOLOGIC HAZARDS</strong></p>
-            <p style="text-align: justify;">This web mapping application provides access to all post-2008 UGS geologic hazard maps in Utah so users can determine the mapped hazards and their relative severity over specific areas.&nbsp;&nbsp;Statewide mapping of Quaternary faults, earthquake epicenters, and a legacy compilation of landslides are available.&nbsp;&nbsp;Limited, comprehensive geologic hazard mapping is available for the remaining hazards listed in the Legend as indicated by red outlines on the map.&nbsp;&nbsp;Hazard map layers, along with available lidar elevation data and , can be enabled in the Legend by clicking on the eye symbol.&nbsp;&nbsp;Map layer units describing the hazard relative severity are also shown in the Legend.&nbsp;</p>
-            <p>&nbsp;</p>
+            <p><span style="font-weight: 400;">The </span><em><span style="font-weight: 400;">Utah Geologic Hazards Database</span></em><span style="font-weight: 400;"> contains post-2008 UGS geologic hazard map data and data from other sources for parts of Utah. These data address earthquake, flood, landslide, and problem soil and rock hazards. Data maintained by other agencies, such as dam failure inundation and earthquake epicenters, are also available to view. This web mapping application is intended to provide planners, local government officials, property owners, developers, engineers, geologists, design professionals, and the public with information on the type, location, and relative severity of geologic hazards that may impact existing and future infrastructure and development. The data also provide information that may be used for emergency response and recovery planning and community risk assessment for existing development and infrastructure.&nbsp;&nbsp;</span></p>
+<p>&nbsp;</p>
+<p><span style="font-weight: 400;">Areas with comprehensive geologic hazard map data are shown with red polygons.&nbsp; Areas where comprehensive map data are not available but some hazard data exists are shown in blue polygons. Statewide data for hazardous (Quaternary age) faults, earthquake epicenters, and a legacy compilation of landslides are also available.&nbsp; Limited, comprehensive geologic hazard map data are available for the remaining hazards listed in the Explanation. Hazard map layers, along with available lidar elevation data, can be enabled in the Legend by clicking on the eye symbol. Map layer units describing the hazard relative severity are also shown in the Legend.&nbsp; The absence of data does not imply that no geologic hazard or hazards exist. Additional geologic hazard mapping is on-going and will be added to the database as it is finalized.&nbsp;&nbsp;</span></p>
+<p>&nbsp;</p>
+<p><strong>Related Information&nbsp;</strong></p>
+<p><span style="font-weight: 400;">For more information, see </span><a href="https://geology.utah.gov/hazards"><span style="font-weight: 400;">https://geology.utah.gov/hazards</span></a><span style="font-weight: 400;"> or contact the UGS.&nbsp;&nbsp;</span></p>
         </div>
      </div>
     </div>
@@ -163,7 +192,10 @@ div.esri-legend__message {
             <div id="collapseReport" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingReport">
               <div class="panel-body">            
                 <div id="reportDiv">
-                    <p>Generator</p>
+                  <b>Generate a Report of the Current Map Extent.</b>
+                  <p><button class="action-button esri-icon-documentation" id="currentButton" type="button"
+                                  title="Current Extents"></button></p>
+                                <p><b>Draw a Custom Area of Interest</b></p>
                                 <p><button class="action-button esri-icon-polygon" id="polygonButton" type="button"
                                   title="Draw polygon"></button> Click to draw a polygon over the area you would like to generate a report.</p>
                                 <p><button class="action-button esri-icon-down-arrow-circled" id="DownloadButton" type="button"
@@ -201,9 +233,50 @@ div.esri-legend__message {
           </div>
   
 
+              <!-- Panel - Disclaimer -->
+
+    <div id="panelDisclaimer" class="panel collapse">
+      <div id="headingDisclaimer" class="panel-heading" role="tab">
+        <div class="panel-title">
+          <a class="panel-toggle" role="button" data-toggle="collapse" href="#collapseDisclaimer"  aria-expanded="true" aria-controls="collapseDisclaimer"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span><span class="panel-label">Disclaimer</span></a> 
+          <a class="panel-close" role="button" data-toggle="collapse" tabindex="0" href="#panelDisclaimer"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a>  
+        </div>
+      </div>
+      <div id="collapseDisclaimer" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingDisclaimer">
+        <div class="panel-body">
+            <p style="text-align: justify;">Although this product represents the work of professional scientists, the Utah Department of Natural Resources, Utah Geological Survey, makes no warranty, expressed or implied, regarding its suitability for a particular use. The Utah Department of Natural Resources, Utah Geological Survey, shall not be liable under any circumstances for any direct, indirect, special, incidental, or consequential damages with respect to claims by users of this product. The Utah Geological Survey does not guarantee accuracy or completeness of the data.
+              The Utah Geologic Hazards Database contains geologic hazard information and data from the Utah Geological Survey (UGS) and other sources for the area of interest shown on the map below and can be used to identify mapped geologic hazards in an area, understand what the hazards are, and some potential ways to mitigate them.
+               The database is periodically updated to incorporate the results of new mapping and/or updated mapping due to updated data and/or methodology; however, more-detailed fault traces and paleoseismic information may be available in recently published geologic maps and reports, so the database should not be considered exhaustive.
+              Locations of mapped geologic hazards should always be considered approximate.
+              The locational accuracy of  hazards on the maps vary, and spatial error can be substantial when viewing structures at high zoom levels that were originally mapped at small scales. Therefore, the locations of hazards on the map should be considered approximate. Depending on the ultimate needs of the user, a site-specific investigation by a qualified Utah-licensed Professional Geologist may be required to accurately characterize the hazards at a particular site.
+              </p>
+            <p>&nbsp;</p>
+        </div>
+     </div>
+    </div>
+
+                  <!-- Panel - Database -->
+
+                  <div id="panelDatabase" class="panel collapse">
+                    <div id="headingDatabase" class="panel-heading" role="tab">
+                      <div class="panel-title">
+                        <a class="panel-toggle" role="button" data-toggle="collapse" href="#collapseDatabase"  aria-expanded="true" aria-controls="collapseDatabase"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span><span class="panel-label">Database Contents</span></a> 
+                        <a class="panel-close" role="button" data-toggle="collapse" tabindex="0" href="#panelDatabase"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a>  
+                      </div>
+                    </div>
+                    <div id="collapseDatabase" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingDatabase">
+                      <div class="panel-body">
+                        <p><span style="font-weight: 400;">The Geologic Hazards Mapping Database contains geologic hazard information and data from the Utah Geological Survey (UGS) and other sources. The database is periodically updated to incorporate the results of new mapping. Detailed geologic hazard mapping is available for limited areas and for specific hazards in Utah and additional mapping is ongoing.</span></p>
+                        <p><br /><span style="font-weight: 400;">The Utah database exists as an attributed geographic information system (GIS) feature class in the State Geographic Information Database (SGID), and is available through the </span><a href="http://gis.utah.gov/data/geoscience/quaternary-faults"><span style="font-weight: 400;">Utah Automated Geographic Reference Center</span></a><span style="font-weight: 400;"> (AGRC). Users can access full data reports for individual hazards by clicking on the &ldquo;Detailed Report&rdquo; link in pop-up window. These reports are not a substitute for a site-specific geologic hazards and geotechnical engineering investigation by a qualified, Utah-licensed consultant.&nbsp; These investigations provide valuable information on the site geologic conditions that may affect or be affected by development, as well as the type and severity of geologic hazards at a site and recommend solutions to mitigate the effects and costs of the hazards, both at the time of construction and over the life of the development.&nbsp; See your local city or county building department for details on these investigations and UGS Circular 122 </span><a href="https://ugspub.nr.utah.gov/publications/circular/c-122.pdf"><span style="font-weight: 400;">https://ugspub.nr.utah.gov/publications/circular/c-122.pdf</span></a><span style="font-weight: 400;">).</span></p>
+                      </div>
+                   </div>
+                  </div>
+
   </div>
 
   <!-- /.calcite-panels -->
+
+
 
   <script type="text/javascript">
     var dojoConfig = {
@@ -224,6 +297,19 @@ div.esri-legend__message {
   <script src="map.js"></script>
 
   
+
+
+<div id="myModal" class="modal">
+
+  <div class="modal-content">
+    <p>Poop</p>
+  </div>
+</div>
+
+
+
+
+
 
 </body>
 </html>

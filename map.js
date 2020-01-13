@@ -26,6 +26,8 @@
       "esri/symbols/SimpleFillSymbol",
       "esri/Graphic",
       "esri/tasks/support/FeatureSet",
+      "esri/tasks/support/Query",
+      "esri/tasks/QueryTask",
       //DGrid
       "dstore/Memory",
       "dojo/data/ObjectStore",
@@ -44,7 +46,7 @@
       "calcite-maps/calcitemaps-arcgis-support-v0.9",
       "dojo/query",
       "dojo/domReady!"
-    ], function(Map, MapView, SceneView, FeatureLayer, MapImageLayer, GroupLayer, watchUtils, Home, Zoom, Compass, Search, Legend, SketchViewModel, BasemapToggle, ScaleBar, Attribution, LayerList, Locate, NavigationToggle, GraphicsLayer, SimpleFillSymbol, Graphic, FeatureSet, Memory, ObjectStore, ItemFileReadStore, DataGrid, OnDemandGrid, Selection, List, Collapse, Dropdown, CalciteMaps, CalciteMapArcGISSupport, query) {
+    ], function(Map, MapView, SceneView, FeatureLayer, MapImageLayer, GroupLayer, watchUtils, Home, Zoom, Compass, Search, Legend, SketchViewModel, BasemapToggle, ScaleBar, Attribution, LayerList, Locate, NavigationToggle, GraphicsLayer, SimpleFillSymbol, Graphic, FeatureSet, Query, QueryTask, Memory, ObjectStore, ItemFileReadStore, DataGrid, OnDemandGrid, Selection, List, Collapse, Dropdown, CalciteMaps, CalciteMapArcGISSupport, query) {
       /******************************************************************
        *
        * Create the map, view and widgets
@@ -948,11 +950,11 @@ var oldestDottedFault = {
 
                       popupTemplate: {
                         outFields: ["*"],
-                        title:"<b>Quaternary Faults</b>",
+                        title:"<b>Hazardous (Quaternary age) Faults</b>",
                         content: qfaultsPopup
                     },
                     }],
-                title: "Quaternary Faults",
+                title: "Hazardous (Quaternary age) Faults",
                 listMode: "hide-children",
                 visible: false,
                 
@@ -964,7 +966,7 @@ var oldestDottedFault = {
 
             const faultRupture = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/4",
-                title: "Surface Fault Rupture Hazard Special Study Zone",
+                title: "Surface Fault Rupture Special Study Zone",
                 elevationInfo: [{
                     mode: "on-the-ground"
                 }],
@@ -1035,7 +1037,7 @@ var oldestDottedFault = {
 
             const tectonicDef = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/16",
-                title: "Salt Tectonics Related Ground Deformation",
+                title: "Salt Tectonics-Related Ground Deformation",
                 elevationInfo: [{
                     mode: "on-the-ground"
                 }],
@@ -1156,7 +1158,7 @@ var oldestDottedFault = {
 
             const pipingSus = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/13",
-                title: "Piping and Erosion Suscepbtibility",
+                title: "Piping and Erosion Susceptibility",
                 elevationInfo: [{
                     mode: "on-the-ground"
                 }],
@@ -1258,7 +1260,7 @@ var oldestDottedFault = {
 
             const radonSus = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/14",
-                title: "Geologic Radon Susceptibility",
+                title: "Radon Susceptibility",
                 elevationInfo: [{
                     mode: "on-the-ground"
                 }],
@@ -1528,7 +1530,7 @@ var oldestDottedFault = {
 
             const erosionZone = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/9",
-                title: "JE Fuller Flood Erosion Hazard Zones",
+                title: "J.E. Fuller Flood Erosion Hazard Zones",
                 elevationInfo: [{
                     mode: "on-the-ground"
                 }],
@@ -1631,12 +1633,12 @@ var oldestDottedFault = {
             const soilHazards = new GroupLayer({
                 title: "Problem Soil and Rock Hazards",
                 visible: true,
-                layers: [radonSus, eolianSus, pipingSus, bedrockPot, solubleSoil, tectonicDef, karstFeatures, groundSubsidence, expansiveSoil, erosionZone, earthFissure, corrosiveSoil, collapsibleSoil, caliche]
+                layers: [eolianSus, solubleSoil, bedrockPot, tectonicDef, radonSus, pipingSus, karstFeatures, erosionZone, groundSubsidence, expansiveSoil, earthFissure, corrosiveSoil, collapsibleSoil, caliche]
             });
 
             const quadBoundaries = new FeatureLayer({
               url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards_Supplemental_Data_View/FeatureServer/0",
-              title: "USGS 1:24,000 Scale Quad Boundaries",
+              title: "USGS 1:24,000-Scale Quad Boundaries",
               elevationInfo: [{
                 mode: "on-the-ground"
             }],
@@ -1795,7 +1797,7 @@ if (title === "Hazard Study Area Boundaries") {
                     layer = airphotoPoints;
                 } else if (title === "Lidar Extents") {
                     layer = lidarBounds;
-                } else if (title === "USGS 1:24,0000 Scale Quad Boundaries") {
+                } else if (title === "USGS 1:24,000-Scale Quad Boundaries") {
                     layer = quadBoundaries;
                 } else if (title === "Karst Features") {
                     layer = karstFeatures;
@@ -1815,25 +1817,25 @@ if (title === "Hazard Study Area Boundaries") {
                     layer = collapsibleSoil;
                 } else if (title === "Corrosive Soil and Rock Susceptibility") {
                     layer = corrosiveSoil;
-                } else if (title === "Geologic Radon Susceptibility") {
+                } else if (title === "Radon Susceptibility") {
                     layer = radonSus;
                 } else if (title === "Shallow Groundwater Susceptibility") {
                     layer = groundwaterSus;
                 } else if (title === "Expansive Soil and Rock Susceptibility") {
                     layer = expansiveSoil;
-                } else if (title === "Piping and Erosion Suscepbtibility") {
+                } else if (title === "Piping and Erosion Susceptibility") {
                     layer = pipingSus;
                 } else if (title === "Rockfall Hazard") {
                     layer = rockfallHaz;
                 } else if (title === "Shallow Bedrock Potential") {
                     layer = bedrockPot;
-                } else if (title === "Salt Tectonics Related Ground Deformation") {
+                } else if (title === "Salt Tectonics-Related Ground Deformation") {
                     layer = tectonicDef;
                 } else if (title === "Wind-Blown Sand Susceptibility") {
                     layer = eolianSus;
-                } else if (title === "Surface Fault Rupture Hazard Special Study Zone") {
+                } else if (title === "Surface Fault Rupture Special Study Zone") {
                     layer = faultRupture;
-                } else if (title === "Quaternary Faults") {
+                } else if (title === "Hazardous (Quaternary age) Faults") {
                     layer = qFaults;
                 } else if (title === "Landslide Susceptibility") {
                     layer = landslideSusceptibility;
@@ -1841,8 +1843,8 @@ if (title === "Hazard Study Area Boundaries") {
                     layer = landslideDeposit;
                 } else if (title === "Legacy Landslide Compilation") {
                     layer = landslideComp;
-                } else if (title === "Dam Failure") {
-                    layer = damInun;
+                } else if (title === "J.E. Fuller Flood Erosion Hazard Zones") {
+                    layer = erosionZone;
                 } else if (title === "Floodplains") {
                     layer = fema;
                 }
@@ -1851,7 +1853,11 @@ if (id === "information") {
 
   // if the information action is triggered, then
   // open the item details page of the service layer
-  window.open(layer.url);
+  //window.open(title.url);
+
+layerInformation(title);
+
+
 
 } else                 if (id === "increase-opacity") {
                     // if the increase-opacity action is triggered, then
@@ -1869,6 +1875,47 @@ if (id === "information") {
                     }
                 }
 });
+
+
+var layerInfoURL = "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Hazard_Layer_Info/FeatureServer/0";
+
+
+  var modal = document.getElementById("myModal");
+
+layerInformation = function(eet){
+    console.log(eet);    
+
+
+    var layerInfoQueryTask = new QueryTask({
+        url: layerInfoURL
+    });
+    console.log("QueryTask");
+    
+    var query = new Query();
+    query.outFields = ["*"];
+    query.where = "title = '"+ eet +"'";
+    console.log(query);
+    
+    layerInfoQueryTask.execute(query).then(function(results){
+        console.log(results.features[0].attributes.content);
+        var contentLayerInfo = results.features[0].attributes.content;
+        document.getElementsByClassName("modal-content")[0].innerHTML = "<b>" + eet + "</b> <br>" + contentLayerInfo;
+
+        modal.style.display = "block";
+      });
+
+
+    // document.getElementsByClassName("modal-content")[0].innerHTML = eet;
+
+    // modal.style.display = "block";
+}
+
+window.onclick = function(event) {
+    console.log(event);
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
 
 
 
@@ -1905,6 +1952,44 @@ if (id === "information") {
                     mapView.map.basemap = e.target.value;
                 }
             });
+
+
+//grab current map extents for report generator
+var currentExtentButton = document.getElementById("currentButton");
+currentExtentButton.onclick = function() {
+    console.log(mapView.extent);
+    var xMini = mapView.extent.xmin;
+    var xMaxi = mapView.extent.xmax;
+    var yMini = mapView.extent.ymin;
+    var yMaxi = mapView.extent.ymax;
+
+    var newRings = [[xMaxi, yMaxi], [xMaxi, yMini], [xMini, yMini], [xMini, yMaxi], [xMaxi, yMaxi]];
+
+var aoi = {spatialReference: {
+    latestWkid: 3857,
+    wkid: 102100
+}};
+
+
+    console.log(aoi);
+    aoi.rings = [newRings];
+    console.log(aoi);
+
+    var params = {
+          description: "Test",
+          polygon: aoi,
+  
+            };
+      console.log(params);
+  
+      localStorage.setItem('aoi', JSON.stringify(params));
+      console.log(localStorage);
+      window.open('./report');
+  };
+  
+
+
+
 
  //SketchView functions
  mapView.when(function() {
