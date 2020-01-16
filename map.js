@@ -6,9 +6,12 @@
       "esri/views/MapView",
       "esri/views/SceneView",
       "esri/layers/FeatureLayer",
+      "esri/layers/ImageryLayer",
       "esri/layers/MapImageLayer",
       "esri/layers/GroupLayer",
       "esri/core/watchUtils",
+      "esri/layers/support/DimensionalDefinition",
+      "esri/layers/support/MosaicRule",
       // Widgets
       "esri/widgets/Home",
       "esri/widgets/Zoom",
@@ -46,7 +49,7 @@
       "calcite-maps/calcitemaps-arcgis-support-v0.9",
       "dojo/query",
       "dojo/domReady!"
-    ], function(Map, MapView, SceneView, FeatureLayer, MapImageLayer, GroupLayer, watchUtils, Home, Zoom, Compass, Search, Legend, SketchViewModel, BasemapToggle, ScaleBar, Attribution, LayerList, Locate, NavigationToggle, GraphicsLayer, SimpleFillSymbol, Graphic, FeatureSet, Query, QueryTask, Memory, ObjectStore, ItemFileReadStore, DataGrid, OnDemandGrid, Selection, List, Collapse, Dropdown, CalciteMaps, CalciteMapArcGISSupport, query) {
+    ], function(Map, MapView, SceneView, FeatureLayer, ImageryLayer, MapImageLayer, GroupLayer, watchUtils, DimensionalDefinition, MosaicRule, Home, Zoom, Compass, Search, Legend, SketchViewModel, BasemapToggle, ScaleBar, Attribution, LayerList, Locate, NavigationToggle, GraphicsLayer, SimpleFillSymbol, Graphic, FeatureSet, Query, QueryTask, Memory, ObjectStore, ItemFileReadStore, DataGrid, OnDemandGrid, Selection, List, Collapse, Dropdown, CalciteMaps, CalciteMapArcGISSupport, query) {
       /******************************************************************
        *
        * Create the map, view and widgets
@@ -124,6 +127,7 @@ var tempGraphic = null;
 
 
  //popup templates for all layers
+
 
  studyAreasPopup = function(feature) {
      console.log(feature);
@@ -884,7 +888,7 @@ var oldestDottedFault = {
             });
 
             const liquefaction = new FeatureLayer({
-                url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/3",
+                url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/2",
                 title: "Liquefaction Susceptibility",
                 elevationInfo: [{
                     mode: "on-the-ground"
@@ -921,6 +925,34 @@ var oldestDottedFault = {
                     // content: "{LQSHazardUnit:liquefactionPopup}{LQSMappedScale:liquefactionPopup}"
                 
             });
+
+            //earthquake ground shaking featurelayer
+            var shakingVector = new FeatureLayer({
+                url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/ArcGIS/rest/services/Utah_Earthquake_Hazards/FeatureServer/5",
+                title: "Earthquake Ground Shaking",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
+                visible: false,
+
+              });
+
+            //earthquake ground shaking imagery layer
+            var shakingRaster = new ImageryLayer({
+                url: "https://webmaps.geology.utah.gov/arcgis/rest/services/Hazards/GroundshakingRaster/ImageServer",
+                visible: true,
+                legendEnabled: false,
+                listMode: "hide",
+                title: "Shaking Raster",
+                pixelFilter: colorize,
+                opacity: 0,
+                popupTemplate: {
+      
+                  title: "Ground Shaking",
+                  content: "{Raster.ServicePixelValue.Raw}  G's"
+      
+                }
+              });  
 
 // **********qfaults from arcgis online as a featurelayer
             // const qFaults = new FeatureLayer({
@@ -965,7 +997,7 @@ var oldestDottedFault = {
 
 
             const faultRupture = new FeatureLayer({
-                url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/4",
+                url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/3",
                 title: "Surface Fault Rupture Special Study Zone",
                 elevationInfo: [{
                     mode: "on-the-ground"
@@ -1717,7 +1749,7 @@ var oldestDottedFault = {
             const earthquakes = new GroupLayer({
                 title: "Earthquake Hazards",
                 visible: true,
-                layers: [liquefaction, qFaults, faultRupture, epicentersMining, epicentersRecent]
+                layers: [shakingVector, liquefaction, qFaults, faultRupture, epicentersMining, epicentersRecent]
             });
 
             const landslides = new GroupLayer({
@@ -1736,6 +1768,78 @@ var oldestDottedFault = {
             mapView.map.add(floodHazards);
             mapView.map.add(earthquakes);
             mapView.map.add(tempGraphicsLayer);
+
+
+
+            //watches when shakingVector is turned to also turn shakingRaster
+
+        watchUtils.watch(shakingVector,'visible', function (e) {
+            if (e == true) {
+                mapView.map.add(shakingRaster);
+                console.log(map.layers.items);
+            }
+            if (e == false) {
+                console.log(map.layers.items);
+                mapView.map.remove(shakingRaster);
+            };
+          });
+
+//symbolize shakingRaster
+function colorize(pixelData) {
+    console.log("coloring");
+    var pixelBlock, factor, minValue, maxValue;
+
+    if (
+      pixelData === null || 
+      pixelData.pixelBlock === null ||
+      pixelData.pixelBlock.pixels === null
+    ) {
+      return;
+    }
+
+    // The pixelBlock stores the values of all pixels visible in the view
+    pixelBlock = pixelData.pixelBlock;
+            console.log(pixelBlock);
+
+    // Get the min and max values of the data in the current view
+    minValue = pixelBlock.statistics[0].minValue;
+    maxValue = pixelBlock.statistics[0].maxValue;
+
+    // The pixels visible in the view
+    var pixels = pixelBlock.pixels;
+
+    // The number of pixels in the pixelBlock
+    var numPixels = pixelBlock.width * pixelBlock.height;
+
+    // Calculate the factor by which to determine the red and blue
+    // values in the colorized version of the layer
+    factor = 255.0 / (maxValue - minValue);
+
+    // Get the pixels containing temperature values in the only band of the data
+    var tempBand = pixels[0];
+
+    // Create empty arrays for each of the RGB bands to set on the pixelBlock
+    var rBand = [];
+    var gBand = [];
+    var bBand = [];
+
+    // Loop through all the pixels in the view
+    for (i = 0; i < numPixels; i++) {
+      // Get the pixel value (the temperature) recorded at the pixel location
+      var tempValue = tempBand[i];
+      // Calculate the red value based on the factor
+      var red = (tempValue - minValue) * factor;
+
+      // Sets a color between blue (coldest) and red (warmest) in each band
+      rBand[i] = red;
+      gBand[i] = 0;
+      bBand[i] = 255 - red;
+    }
+
+    // Set the new pixel values on the pixelBlock
+    pixelData.pixelBlock.pixels = [rBand, gBand, bBand];
+    pixelData.pixelBlock.pixelType = "U8"; // U8 is used for color
+  }
 
 
 
