@@ -2195,6 +2195,7 @@ downloadButton.onclick = function() {
   console.log(graphic);
   console.log(aoi);
 
+
   var params = {
         description: "Test",
         polygon: aoi,
