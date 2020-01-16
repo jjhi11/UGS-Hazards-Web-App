@@ -6,9 +6,12 @@
       "esri/views/MapView",
       "esri/views/SceneView",
       "esri/layers/FeatureLayer",
+      "esri/layers/ImageryLayer",
       "esri/layers/MapImageLayer",
       "esri/layers/GroupLayer",
       "esri/core/watchUtils",
+      "esri/layers/support/DimensionalDefinition",
+      "esri/layers/support/MosaicRule",
       // Widgets
       "esri/widgets/Home",
       "esri/widgets/Zoom",
@@ -26,6 +29,8 @@
       "esri/symbols/SimpleFillSymbol",
       "esri/Graphic",
       "esri/tasks/support/FeatureSet",
+      "esri/tasks/support/Query",
+      "esri/tasks/QueryTask",
       //DGrid
       "dstore/Memory",
       "dojo/data/ObjectStore",
@@ -44,7 +49,7 @@
       "calcite-maps/calcitemaps-arcgis-support-v0.9",
       "dojo/query",
       "dojo/domReady!"
-    ], function(Map, MapView, SceneView, FeatureLayer, MapImageLayer, GroupLayer, watchUtils, Home, Zoom, Compass, Search, Legend, SketchViewModel, BasemapToggle, ScaleBar, Attribution, LayerList, Locate, NavigationToggle, GraphicsLayer, SimpleFillSymbol, Graphic, FeatureSet, Memory, ObjectStore, ItemFileReadStore, DataGrid, OnDemandGrid, Selection, List, Collapse, Dropdown, CalciteMaps, CalciteMapArcGISSupport, query) {
+    ], function(Map, MapView, SceneView, FeatureLayer, ImageryLayer, MapImageLayer, GroupLayer, watchUtils, DimensionalDefinition, MosaicRule, Home, Zoom, Compass, Search, Legend, SketchViewModel, BasemapToggle, ScaleBar, Attribution, LayerList, Locate, NavigationToggle, GraphicsLayer, SimpleFillSymbol, Graphic, FeatureSet, Query, QueryTask, Memory, ObjectStore, ItemFileReadStore, DataGrid, OnDemandGrid, Selection, List, Collapse, Dropdown, CalciteMaps, CalciteMapArcGISSupport, query) {
       /******************************************************************
        *
        * Create the map, view and widgets
@@ -123,6 +128,7 @@ var tempGraphic = null;
 
  //popup templates for all layers
 
+
  studyAreasPopup = function(feature) {
      console.log(feature);
                 var contentS = "";
@@ -186,58 +192,58 @@ var tempGraphic = null;
             qfaultsPopup = function(feature) {
                 console.log(feature);
                 var content = "";
-                    if (feature.graphic.attributes.faultnum) {
-                        content += "<span class='bold' title='Magnitude'><b>Fault Number: </b></span>{faultnum}<br/>";
+                    if (feature.graphic.attributes.FaultNum) {
+                        content += "<span class='bold' title='Magnitude'><b>Fault Number: </b></span>{FaultNum}<br/>";
                     }
-                    if (feature.graphic.attributes.faultzone) {
-                        content += "<span class='bold' title='Longitude'><b>Fault Zone: </b></span>{faultzone}<br/>";
+                    if (feature.graphic.attributes.FaultZone) {
+                        content += "<span class='bold' title='Longitude'><b>Fault Zone: </b></span>{FaultZone}<br/>";
                     }
-                    if (feature.graphic.attributes.faultname) {
-                        content += "<span class='bold' title='Latitude'><b>Fault Name: </b></span>{faultname}<br/>";
+                    if (feature.graphic.attributes.FaultName) {
+                        content += "<span class='bold' title='Latitude'><b>Fault Name: </b></span>{FaultName}<br/>";
                     }
-                    if (feature.graphic.attributes.sectionname) {
-                        content += "<span class='bold' title='Depth'><b>Section Name: </b></span>{sectionname}<br/>";
+                    if (feature.graphic.attributes.SectionName) {
+                        content += "<span class='bold' title='Depth'><b>Section Name: </b></span>{SectionName}<br/>";
                     }
-                    if (feature.graphic.attributes.strandname) {
-                        content += "<span class='bold' title='Date'><b>Strand Name: </b></span>{strandname}<br/>";
+                    if (feature.graphic.attributes.StrandName) {
+                        content += "<span class='bold' title='Date'><b>Strand Name: </b></span>{StrandName}<br/>";
                     }
-                    if (feature.graphic.attributes.mappedscale) {
-                        content += "<span class='bold' title='Date'><b>Mapped Scale: </b></span>{mappedscale}<br/>";
+                    if (feature.graphic.attributes.MappedScale) {
+                        content += "<span class='bold' title='Date'><b>Mapped Scale: </b></span>{MappedScale}<br/>";
                     }
-                    if (feature.graphic.attributes.dipdirection) {
-                        content += "<span class='bold' title='Date'><b>Dip Direction: </b></span>{dipdirection}<br/>";
+                    if (feature.graphic.attributes.DipDirection) {
+                        content += "<span class='bold' title='Date'><b>Dip Direction: </b></span>{DipDirection}<br/>";
                     }
-                    if (feature.graphic.attributes.slipsense) {
-                        content += "<span class='bold' title='Date'><b>Slip Sense: </b></span>{slipsense}<br/>";
+                    if (feature.graphic.attributes.SlipSense) {
+                        content += "<span class='bold' title='Date'><b>Slip Sense: </b></span>{SlipSense}<br/>";
                     }
-                    if (feature.graphic.attributes.sliprate) {
-                        content += "<span class='bold' title='Date'><b>Slip Rate: </b></span>{sliprate}<br/>";
+                    if (feature.graphic.attributes.SlipRate) {
+                        content += "<span class='bold' title='Date'><b>Slip Rate: </b></span>{SlipRate}<br/>";
                     }
-                    if (feature.graphic.attributes.mappingconstraint) {
-                        content += "<span class='bold' title='Date'><b>Mapping Constraint: </b></span>{mappingconstraint}<br/>";
+                    if (feature.graphic.attributes.MappingConstraint) {
+                        content += "<span class='bold' title='Date'><b>Mapping Constraint: </b></span>{MappingConstraint}<br/>";
                     }
-                var slipS = feature.graphic.attributes.slipsense;
+                var slipS = feature.graphic.attributes.SlipSense;
 
                         if (slipS == "Normal") {
-                            content += "<span class='bold' title='Date'><b>Fault Class: </b></span>{faultclass}<br/>";
+                            content += "<span class='bold' title='Date'><b>Fault Class: </b></span>{FaultClass}<br/>";
                         }
                         else if (slipS == "Reverse") {
-                            content += "<span class='bold' title='Date'><b>Fault Class: </b></span>{faultclass}<br/>";   
+                            content += "<span class='bold' title='Date'><b>Fault Class: </b></span>{FaultClass}<br/>";   
                         }
                         else {
-                            content += "<span class='bold' title='Date'><b>Fold Class: </b></span>{faultclass}<br/>";
+                            content += "<span class='bold' title='Date'><b>Fold Class: </b></span>{FaultClass}<br/>";
                         }
 
 
 
                         if (slipS == "Normal") {
-                            content += "<span class='bold' title='Date'><b>Fault Age: </b></span>{faultage}<br/>";
+                            content += "<span class='bold' title='Date'><b>Fault Age: </b></span>{FaultAge}<br/>";
                         }
                         else if (slipS == "Reverse") {
-                            content += "<span class='bold' title='Date'><b>Fault Age: </b></span>{faultage}<br/>";   
+                            content += "<span class='bold' title='Date'><b>Fault Age: </b></span>{FaultAge}<br/>";   
                         }
                         else {
-                            content += "<span class='bold' title='Date'><b>Fold Age: </b></span>{faultage}<br/>";
+                            content += "<span class='bold' title='Date'><b>Fold Age: </b></span>{FaultAge}<br/>";
                         }
 
                 if (feature.graphic.attributes.USGS_Link) {
@@ -882,7 +888,7 @@ var oldestDottedFault = {
             });
 
             const liquefaction = new FeatureLayer({
-                url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/3",
+                url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/2",
                 title: "Liquefaction Susceptibility",
                 elevationInfo: [{
                     mode: "on-the-ground"
@@ -920,6 +926,34 @@ var oldestDottedFault = {
                 
             });
 
+            //earthquake ground shaking featurelayer
+            var shakingVector = new FeatureLayer({
+                url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/ArcGIS/rest/services/Utah_Earthquake_Hazards/FeatureServer/5",
+                title: "Earthquake Ground Shaking",
+                elevationInfo: [{
+                    mode: "on-the-ground"
+                }],
+                visible: false,
+
+              });
+
+            //earthquake ground shaking imagery layer
+            var shakingRaster = new ImageryLayer({
+                url: "https://webmaps.geology.utah.gov/arcgis/rest/services/Hazards/GroundshakingRaster/ImageServer",
+                visible: true,
+                legendEnabled: false,
+                listMode: "hide",
+                title: "Shaking Raster",
+                pixelFilter: colorize,
+                opacity: 0,
+                popupTemplate: {
+      
+                  title: "Ground Shaking",
+                  content: "{Raster.ServicePixelValue.Raw}  G's"
+      
+                }
+              });  
+
 // **********qfaults from arcgis online as a featurelayer
             // const qFaults = new FeatureLayer({
             //     url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/2",
@@ -948,13 +982,13 @@ var oldestDottedFault = {
 
                       popupTemplate: {
                         outFields: ["*"],
-                        title:"<b>Quaternary Faults</b>",
+                        title:"<b>Hazardous (Quaternary age) Faults</b>",
                         content: qfaultsPopup
                     },
                     }],
-                title: "Quaternary Faults",
+                title: "Hazardous (Quaternary age) Faults",
                 listMode: "hide-children",
-                visible: true,
+                visible: false,
                 
                 
 
@@ -963,8 +997,8 @@ var oldestDottedFault = {
 
 
             const faultRupture = new FeatureLayer({
-                url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/4",
-                title: "Surface Fault Rupture Hazard Special Study Zone",
+                url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Earthquake_Hazards/FeatureServer/3",
+                title: "Surface Fault Rupture Special Study Zone",
                 elevationInfo: [{
                     mode: "on-the-ground"
                 }],
@@ -1035,7 +1069,7 @@ var oldestDottedFault = {
 
             const tectonicDef = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/16",
-                title: "Salt Tectonics Related Ground Deformation",
+                title: "Salt Tectonics-Related Ground Deformation",
                 elevationInfo: [{
                     mode: "on-the-ground"
                 }],
@@ -1156,7 +1190,7 @@ var oldestDottedFault = {
 
             const pipingSus = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/13",
-                title: "Piping and Erosion Suscepbtibility",
+                title: "Piping and Erosion Susceptibility",
                 elevationInfo: [{
                     mode: "on-the-ground"
                 }],
@@ -1528,7 +1562,7 @@ var oldestDottedFault = {
 
             const erosionZone = new FeatureLayer({
                 url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards/FeatureServer/9",
-                title: "JE Fuller Flood Erosion Hazard Zones",
+                title: "J.E. Fuller Flood Erosion Hazard Zones",
                 elevationInfo: [{
                     mode: "on-the-ground"
                 }],
@@ -1631,12 +1665,12 @@ var oldestDottedFault = {
             const soilHazards = new GroupLayer({
                 title: "Problem Soil and Rock Hazards",
                 visible: true,
-                layers: [radonSus, eolianSus, pipingSus, rockfallHaz, bedrockPot, solubleSoil, tectonicDef, karstFeatures, groundSubsidence, expansiveSoil, erosionZone, earthFissure, corrosiveSoil, collapsibleSoil, caliche]
+                layers: [eolianSus, solubleSoil, bedrockPot, tectonicDef, radonSus, pipingSus, karstFeatures, erosionZone, groundSubsidence, expansiveSoil, earthFissure, corrosiveSoil, collapsibleSoil, caliche]
             });
 
             const quadBoundaries = new FeatureLayer({
               url: "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Utah_Geologic_Hazards_Supplemental_Data_View/FeatureServer/0",
-              title: "USGS 1:24,000 Scale Quad Boundaries",
+              title: "USGS 1:24,000-Scale Quad Boundaries",
               elevationInfo: [{
                 mode: "on-the-ground"
             }],
@@ -1715,13 +1749,13 @@ var oldestDottedFault = {
             const earthquakes = new GroupLayer({
                 title: "Earthquake Hazards",
                 visible: true,
-                layers: [liquefaction, qFaults, faultRupture, epicentersMining, epicentersRecent]
+                layers: [shakingVector, liquefaction, qFaults, faultRupture, epicentersMining, epicentersRecent]
             });
 
             const landslides = new GroupLayer({
                 title: "Landslide Hazards",
                 visible: true,
-                layers: [landslideComp, landslideSusceptibility, landslideDeposit],    
+                layers: [landslideComp, landslideSusceptibility, landslideDeposit, rockfallHaz],    
             });
             
             mapView.map.add(quadBoundaries);
@@ -1734,6 +1768,78 @@ var oldestDottedFault = {
             mapView.map.add(floodHazards);
             mapView.map.add(earthquakes);
             mapView.map.add(tempGraphicsLayer);
+
+
+
+            //watches when shakingVector is turned to also turn shakingRaster
+
+        watchUtils.watch(shakingVector,'visible', function (e) {
+            if (e == true) {
+                mapView.map.add(shakingRaster);
+                console.log(map.layers.items);
+            }
+            if (e == false) {
+                console.log(map.layers.items);
+                mapView.map.remove(shakingRaster);
+            };
+          });
+
+//symbolize shakingRaster
+function colorize(pixelData) {
+    console.log("coloring");
+    var pixelBlock, factor, minValue, maxValue;
+
+    if (
+      pixelData === null || 
+      pixelData.pixelBlock === null ||
+      pixelData.pixelBlock.pixels === null
+    ) {
+      return;
+    }
+
+    // The pixelBlock stores the values of all pixels visible in the view
+    pixelBlock = pixelData.pixelBlock;
+            console.log(pixelBlock);
+
+    // Get the min and max values of the data in the current view
+    minValue = pixelBlock.statistics[0].minValue;
+    maxValue = pixelBlock.statistics[0].maxValue;
+
+    // The pixels visible in the view
+    var pixels = pixelBlock.pixels;
+
+    // The number of pixels in the pixelBlock
+    var numPixels = pixelBlock.width * pixelBlock.height;
+
+    // Calculate the factor by which to determine the red and blue
+    // values in the colorized version of the layer
+    factor = 255.0 / (maxValue - minValue);
+
+    // Get the pixels containing temperature values in the only band of the data
+    var tempBand = pixels[0];
+
+    // Create empty arrays for each of the RGB bands to set on the pixelBlock
+    var rBand = [];
+    var gBand = [];
+    var bBand = [];
+
+    // Loop through all the pixels in the view
+    for (i = 0; i < numPixels; i++) {
+      // Get the pixel value (the temperature) recorded at the pixel location
+      var tempValue = tempBand[i];
+      // Calculate the red value based on the factor
+      var red = (tempValue - minValue) * factor;
+
+      // Sets a color between blue (coldest) and red (warmest) in each band
+      rBand[i] = red;
+      gBand[i] = 0;
+      bBand[i] = 255 - red;
+    }
+
+    // Set the new pixel values on the pixelBlock
+    pixelData.pixelBlock.pixels = [rBand, gBand, bBand];
+    pixelData.pixelBlock.pixelType = "U8"; // U8 is used for color
+  }
 
 
 
@@ -1750,11 +1856,11 @@ layerList = new LayerList({
                 open: true
             }
             item.actionsSections = [
-                // [{
-                //     title: "Layer information",
-                //     className: "esri-icon-description",
-                //     id: "information"
-                // }],
+                [{
+                    title: "Layer information",
+                    className: "esri-icon-description",
+                    id: "information"
+                }],
                 [{
                     title: "Increase opacity",
                     className: "esri-icon-up",
@@ -1795,7 +1901,7 @@ if (title === "Hazard Study Area Boundaries") {
                     layer = airphotoPoints;
                 } else if (title === "Lidar Extents") {
                     layer = lidarBounds;
-                } else if (title === "USGS 1:24,0000 Scale Quad Boundaries") {
+                } else if (title === "USGS 1:24,000-Scale Quad Boundaries") {
                     layer = quadBoundaries;
                 } else if (title === "Karst Features") {
                     layer = karstFeatures;
@@ -1807,8 +1913,6 @@ if (title === "Hazard Study Area Boundaries") {
                     layer = earthFissure;
                 } else if (title === "Flood Hazard") {
                     layer = floodHazard;
-                } else if (title === "Flood Canyon Hazard") {
-                    layer = floodCanyon;
                 } else if (title === "Caliche Susceptibility") {
                     layer = caliche;
                 } else if (title === "Soluble Soil & Rock Susceptibility") {
@@ -1823,19 +1927,19 @@ if (title === "Hazard Study Area Boundaries") {
                     layer = groundwaterSus;
                 } else if (title === "Expansive Soil and Rock Susceptibility") {
                     layer = expansiveSoil;
-                } else if (title === "Piping and Erosion Suscepbtibility") {
+                } else if (title === "Piping and Erosion Susceptibility") {
                     layer = pipingSus;
                 } else if (title === "Rockfall Hazard") {
                     layer = rockfallHaz;
                 } else if (title === "Shallow Bedrock Potential") {
                     layer = bedrockPot;
-                } else if (title === "Salt Tectonics Related Ground Deformation") {
+                } else if (title === "Salt Tectonics-Related Ground Deformation") {
                     layer = tectonicDef;
                 } else if (title === "Wind-Blown Sand Susceptibility") {
                     layer = eolianSus;
-                } else if (title === "Surface Fault Rupture Hazard Special Study Zone") {
+                } else if (title === "Surface Fault Rupture Special Study Zone") {
                     layer = faultRupture;
-                } else if (title === "Quaternary Faults") {
+                } else if (title === "Hazardous (Quaternary age) Faults") {
                     layer = qFaults;
                 } else if (title === "Landslide Susceptibility") {
                     layer = landslideSusceptibility;
@@ -1843,8 +1947,8 @@ if (title === "Hazard Study Area Boundaries") {
                     layer = landslideDeposit;
                 } else if (title === "Legacy Landslide Compilation") {
                     layer = landslideComp;
-                } else if (title === "Dam Failure") {
-                    layer = damInun;
+                } else if (title === "J.E. Fuller Flood Erosion Hazard Zones") {
+                    layer = erosionZone;
                 } else if (title === "Floodplains") {
                     layer = fema;
                 }
@@ -1853,7 +1957,11 @@ if (id === "information") {
 
   // if the information action is triggered, then
   // open the item details page of the service layer
-  window.open(layer.url);
+  //window.open(title.url);
+
+layerInformation(title);
+
+
 
 } else                 if (id === "increase-opacity") {
                     // if the increase-opacity action is triggered, then
@@ -1871,6 +1979,47 @@ if (id === "information") {
                     }
                 }
 });
+
+
+var layerInfoURL = "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Hazard_Layer_Info/FeatureServer/0";
+
+
+  var modal = document.getElementById("myModal");
+
+layerInformation = function(eet){
+    console.log(eet);    
+
+
+    var layerInfoQueryTask = new QueryTask({
+        url: layerInfoURL
+    });
+    console.log("QueryTask");
+    
+    var query = new Query();
+    query.outFields = ["*"];
+    query.where = "title = '"+ eet +"'";
+    console.log(query);
+    
+    layerInfoQueryTask.execute(query).then(function(results){
+        console.log(results.features[0].attributes.content);
+        var contentLayerInfo = results.features[0].attributes.content;
+        document.getElementsByClassName("modal-content")[0].innerHTML = "<b>" + eet + "</b> <br>" + contentLayerInfo;
+
+        modal.style.display = "block";
+      });
+
+
+    // document.getElementsByClassName("modal-content")[0].innerHTML = eet;
+
+    // modal.style.display = "block";
+}
+
+window.onclick = function(event) {
+    console.log(event);
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
 
 
 
@@ -1907,6 +2056,44 @@ if (id === "information") {
                     mapView.map.basemap = e.target.value;
                 }
             });
+
+
+//grab current map extents for report generator
+var currentExtentButton = document.getElementById("currentButton");
+currentExtentButton.onclick = function() {
+    console.log(mapView.extent);
+    var xMini = mapView.extent.xmin;
+    var xMaxi = mapView.extent.xmax;
+    var yMini = mapView.extent.ymin;
+    var yMaxi = mapView.extent.ymax;
+
+    var newRings = [[xMaxi, yMaxi], [xMaxi, yMini], [xMini, yMini], [xMini, yMaxi], [xMaxi, yMaxi]];
+
+var aoi = {spatialReference: {
+    latestWkid: 3857,
+    wkid: 102100
+}};
+
+
+    console.log(aoi);
+    aoi.rings = [newRings];
+    console.log(aoi);
+
+    var params = {
+          description: "Test",
+          polygon: aoi,
+  
+            };
+      console.log(params);
+  
+      localStorage.setItem('aoi', JSON.stringify(params));
+      console.log(localStorage);
+      window.open('./report');
+  };
+  
+
+
+
 
  //SketchView functions
  mapView.when(function() {
