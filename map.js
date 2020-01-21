@@ -2098,7 +2098,7 @@ var aoi = {spatialReference: {
  //SketchView functions
  mapView.when(function() {
                     // create a new sketch view model
-                    const sketchViewModel = new SketchViewModel({
+                    const sketchVM = new SketchViewModel({
                     view: mapView,
                     layer: tempGraphicsLayer,
                      polygonSymbol: {
@@ -2115,10 +2115,10 @@ var aoi = {spatialReference: {
                          setUpClickHandler();
 
 //Listen to create event to add a newly created graphic to view
-sketchViewModel.on(["create"], addGraphic);
+sketchVM.on(["create"], addGraphic);
 
 //Listen the sketchViewModel's update
-sketchViewModel.on(["update"], updateGraphic);
+sketchVM.on(["update"], updateGraphic);
 
 
 
@@ -2128,7 +2128,7 @@ function addGraphic(event) {
   // `create-complete` event geometry.
   graphic = new Graphic({
     geometry: event.geometry,
-    symbol: sketchViewModel.polygonSymbol
+    symbol: sketchVM.polygonSymbol
   });
   tempGraphicsLayer.add(graphic);
   console.log(event.graphic);
@@ -2164,7 +2164,7 @@ function setUpClickHandler() {
           // Remove the graphic from the GraphicsLayer
           // Sketch will handle displaying the graphic while being updated
           tempGraphicsLayer.remove(editGraphic);
-          sketchViewModel.update(editGraphic);
+          sketchVM.update(editGraphic);
         }
       }
     });
@@ -2177,7 +2177,7 @@ function setUpClickHandler() {
 var drawPolygonButton = document.getElementById("polygonButton");
 drawPolygonButton.onclick = function() {
   // set the sketch to create a polygon geometry
-  sketchViewModel.create("polygon");
+  sketchVM.create("polygon", {mode: "click"});
   setActiveButton(this);
 };
 
@@ -2211,7 +2211,7 @@ downloadButton.onclick = function() {
 
 //Reset button
 document.getElementById("resetBtn").onclick = function() {
-  sketchViewModel.cancel();
+  sketchVM.cancel();
   tempGraphicsLayer.removeAll();
   setActiveButton();
 };
