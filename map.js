@@ -43,10 +43,10 @@
       "bootstrap/Collapse",
       "bootstrap/Dropdown",
       // Calcite Maps
-      "calcite-maps/calcitemaps-v0.9",
+      "calcite-maps/calcitemaps-v0.10",
       
       // Calcite Maps ArcGIS Support
-      "calcite-maps/calcitemaps-arcgis-support-v0.9",
+      "calcite-maps/calcitemaps-arcgis-support-v0.10",
       "dojo/query",
       "dojo/domReady!"
     ], function(Map, MapView, SceneView, FeatureLayer, ImageryLayer, MapImageLayer, GroupLayer, watchUtils, DimensionalDefinition, MosaicRule, Home, Zoom, Compass, Search, Legend, SketchViewModel, BasemapToggle, ScaleBar, Attribution, LayerList, Locate, NavigationToggle, GraphicsLayer, SimpleFillSymbol, Graphic, FeatureSet, Query, QueryTask, Memory, ObjectStore, ItemFileReadStore, DataGrid, OnDemandGrid, Selection, List, Collapse, Dropdown, CalciteMaps, CalciteMapArcGISSupport, query) {
@@ -1889,7 +1889,7 @@ var id = event.action.id;
 
 var title = event.item.title;
 
-if (title === "Hazard Study Area Boundaries") {
+if (title === "Mapped Areas") {
                     layer = hazardStudy;
                 } else if (title === "Epicenters (1850 to 2016)") {
                     layer = epicentersRecent;
@@ -1951,6 +1951,10 @@ if (title === "Hazard Study Area Boundaries") {
                     layer = erosionZone;
                 } else if (title === "Floodplains") {
                     layer = fema;
+                } else if (title === "Earthquake Ground Shaking") {
+                    layer = shakingVector;
+                } else if (title === "Areas Not Mapped w/in Project Areas") {
+                    layer = notMapped;
                 }
 
 if (id === "information") {
